@@ -1,0 +1,20 @@
+↑convertigo: 7.9.0.m006
+↓MergedViews [core.Project]: 
+  comment: Convertigo Mobile builder Project
+  corsOrigin: =Origin
+  ↓mergedviews [connectors.FullSyncConnector]: 🗏 connectors/mergedviews.yaml
+  ↓FlightsMerged [sequences.GenericSequence]: 🗏 sequences/FlightsMerged.yaml
+  ↓InitDB [sequences.GenericSequence]: 🗏 sequences/InitDB.yaml
+  ↓CouchDb_schema [references.ImportXsdSchemaReference]: 
+    urlpath: http://localhost:18080/convertigo/xsd/couchdb/CouchDb.xsd
+  ↓MobileBuilderTemplate [references.ProjectSchemaReference]: 
+    comment: mobile builder template
+    projectName: mobilebuilder_tpl_7_9_0=https://github.com/convertigo/c8oprj-mobilebuilder-tpl/archive/mobilebuilder_tpl_7_9_0.zip
+  ↓MobileApplication [core.MobileApplication]: 
+    comment: Describes the mobile application global properties
+    splashRemoveMode: beforeUpdate
+    ↓Android [mobileplatforms.Android]: 
+      comment: Android platform
+    ↓iOS [mobileplatforms.IOs]: 
+      comment: iOS platform
+    ↓Application [mobile.components.ApplicationComponent]: 🗏 mobileApplication.yaml

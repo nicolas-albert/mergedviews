@@ -1,0 +1,49 @@
+↓Call_Transaction [steps.TransactionStep-1609856411140]: 
+  sourceTransaction: MergedViews.mergedviews.GetViewWithDocs
+  ↓_use_view [variables.StepVariable-1609856411142]: 
+    description: View function name
+    value: flights_merged
+  ↓_use_limit [variables.StepVariable-1609860605783]: 
+    description: (number) – Limit the number of the returned documents to the specified number. Optional
+    value: 20
+↓rows [steps.XMLComplexStep-1609859491387]: 
+  nodeName: rows
+  ↓type [steps.XMLAttributeStep-1609859535948]: 
+    nodeName: type
+    nodeText: array
+  ↓Iterator [steps.IteratorStep-1609857432797]: 
+    sourceDefinition: 
+      - xmlizable: 
+        - ↑classname: com.twinsoft.convertigo.beans.common.XMLVector
+        - com.twinsoft.convertigo.beans.common.XMLVector: 
+          - java.lang.String: 
+            - ↑value: 1609856411140
+          - java.lang.String: 
+            - ↑value: ./document/couchdb_output/rows/item[key/item[2] = "0"]
+    ↓Copy [steps.XMLCopyStep-1609858010626]: 
+      sourceDefinition: 
+        - xmlizable: 
+          - ↑classname: com.twinsoft.convertigo.beans.common.XMLVector
+          - com.twinsoft.convertigo.beans.common.XMLVector: 
+            - java.lang.String: 
+              - ↑value: 1609857432797
+            - java.lang.String: 
+              - ↑value: ./doc
+  ↓Iterator1 [steps.IteratorStep-1609858180397]: 
+    sourceDefinition: 
+      - xmlizable: 
+        - ↑classname: com.twinsoft.convertigo.beans.common.XMLVector
+        - com.twinsoft.convertigo.beans.common.XMLVector: 
+          - java.lang.String: 
+            - ↑value: 1609856411140
+          - java.lang.String: 
+            - ↑value: ./document/couchdb_output/rows/item[key/item[2] != "0"]
+    ↓Merge [steps.SimpleStep-1609858292324]: 
+      expression: |
+        var xpath = context.getXpathApi();
+        var id = xpath.selectNode(item, "id").getTextContent();
+        var curDoc = xpath.selectNode(item, "doc");
+        var target = xpath.selectNode(item, "value/target").getTextContent().replace(".", "/");
+        var targetNode = xpath.selectNode(dom.getDocumentElement(), "rows/doc[_id[.=\"" + id + "\"]]/" + target);
+        dom.renameNode(curDoc, null, targetNode.getNodeName());
+        targetNode.getParentNode().replaceChild(curDoc, targetNode);

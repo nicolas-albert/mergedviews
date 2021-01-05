@@ -1,0 +1,39 @@
+↓InitDB [steps.SimpleStep-1609854190262]: 
+  expression: |
+    'data = [];
+    
+    cities = ["Tokyo", "New York", "Mexico", "Seoul", "Londre", "Paris", "Pekin"];
+    companies = ["Delta Air Lines", "American Airlines", "Ryanair", "Air France"];
+    nb_flights = 1000;
+    
+    function makeEntries(type, entries) {
+    	for (i = 0 ; i < entries.length; i++) {
+    		var code = entries[i].substring(0, 3).toLowerCase();
+    		entries[i] = {
+    			_id: type + "_" + code,
+    			type: type,
+    			code: code,
+    			name: entries[i]
+    		};
+    		data.push(entries[i]);
+    	}
+    }
+    
+    makeEntries("city", cities);
+    makeEntries("company", companies);
+    
+    for (i = 0; i < nb_flights; i++) {
+    	data.push({
+    		_id: "flight_" + i,
+    		type: "flight",
+    		city: cities[i % cities.length]._id,
+    		company: companies[Math.floor(i / companies.length) % companies.length]._id
+    	});
+    }
+    
+    _use_json_base = JSON.stringify(data);'
+↓Call_Transaction [steps.TransactionStep-1609854200068]: 
+  output: true
+  sourceTransaction: MergedViews.mergedviews.PostBulkDocuments
+  ↓_use_json_base [variables.StepVariable-1609855263454]: 
+    description: (string) – JSON use as a base for the array of documents (js array), or for individual documents (js object). Optional

@@ -1,0 +1,52 @@
+↑default: true
+databaseName: mergedviews
+↓GetServerInfo [transactions.couchdb.GetServerInfoTransaction]: 
+  ↑default: true
+↓GetViewWithDocs [transactions.couchdb.GetViewTransaction]: 
+  p_ddoc: MergedViews
+  q_include_docs: true
+  ↓_use_view [variables.RequestableVariable-1609856408103]: 
+    description: View function name
+  ↓_use_limit [variables.RequestableVariable-1609860599843]: 
+    description: (number) – Limit the number of the returned documents to the specified number. Optional
+↓PostBulkDocuments [transactions.couchdb.PostBulkDocumentsTransaction]: 
+  fullSyncAclPolicy: fromKeyC8oAcl
+  policy: override
+  useHash: true
+  ↓_use_json_base [variables.RequestableVariable-1609855202795]: 
+    description: (string) – JSON use as a base for the array of documents (js array), or for individual documents (js object). Optional
+↓ResetDatabase [transactions.couchdb.ResetDatabaseTransaction]: 
+↓MergedViews [couchdb.DesignDocument]: 
+  docdata: 
+    →: |
+      '{
+        "_id": "_design\/MergedViews",
+        "filters": {},
+        "updates": {},
+        "views": {
+          "flights_basic": {
+            "map": "function (doc) {\r\n
+          try {\r\n
+              if (doc.type == \"flight\") {\r\n
+                  emit(doc._id, doc._rev);\r\n
+              }\r\n
+          } catch (err) {\r\n
+              log(err.message);\r\n
+          }\r\n
+      }"
+          },
+          "flights_merged": {
+            "map": "function (doc) {\r\n
+          try {\r\n
+              if (doc.type == \"flight\") {\r\n
+                  emit([doc._id, 0], {_id: doc._id});\r\n
+                  emit([doc._id, 1], {_id: doc.city, target: \"city\"});\r\n
+                  emit([doc._id, 2], {_id: doc.company, target: \"company\"});\r\n
+              }\r\n
+          } catch (err) {\r\n
+              log(err.message);\r\n
+          }\r\n
+      }"
+          }
+        }
+      }'
